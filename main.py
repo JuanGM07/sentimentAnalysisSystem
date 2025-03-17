@@ -1,4 +1,5 @@
 import re
+import spacy
 import nltk
 from collections import Counter
 from pysentimiento import create_analyzer
@@ -8,13 +9,15 @@ from serpOpinions import scrape_all_opinions
 from dotenv import load_dotenv
 import os
 from serpOpinions import scrap_urls
-from serpOpinions import scrape_all_opinions
 from googleOpinions import get_place_id
 from googleOpinions import obtener_resenas
 
 load_dotenv()
 
-nombreNegocio = "Confiteria Guillen Huelva"
+nombreNegocio = "Restaurante Bonilla Huelva"  # 🔹 Se usará para limpiar texto
+
+# Cargar modelo de NLP en español
+nlp = spacy.load("es_core_news_sm")
 
 # Crear analizador de sentimientos
 analyzer = create_analyzer(task="sentiment", lang="es")
@@ -23,61 +26,60 @@ analyzer = create_analyzer(task="sentiment", lang="es")
 apiKey = os.getenv("API_KEY")
 serpApiKey = os.getenv("SERP_API_KEY")
 
-# Descargar stopwords en español
+# Descargar stopwords
 nltk.download('stopwords')
-nltk.download('punkt_tab')
+nltk.download('punkt')
 stop_words = set(stopwords.words('spanish'))
+stop_words.update(["bueno", "malo", "ser", "estar", "toda", "todo", "día", "noche"])  # 🔹 Más palabras irrelevantes
 
-# Obtener opiniones de Google 
+# Obtener opiniones
 place_id = get_place_id(nombreNegocio, apiKey)
 resenas_google = obtener_resenas(apiKey, place_id)
-
-# Obtener opiniones de Serp
 enlaces = scrap_urls(nombreNegocio, serpApiKey)
 resenas_serp = scrape_all_opinions(enlaces)
 
 # Unir todas las opiniones
 opiniones = resenas_serp + resenas_google
 
-# Diccionarios para clasificar palabras clave
+# Listas para clasificar palabras clave
 positivas = []
 negativas = []
 
 def extraer_texto(opinion):
-    """ 
-    Extrae el texto de la opinión si es un diccionario o una lista.
-    Si es un diccionario, usa la clave 'text'. 
-    Si es una lista, toma el primer elemento válido.
-    """
+    """Extrae el texto de una opinión sin importar su formato."""
     if isinstance(opinion, dict):
-        return opinion.get("text", "")  # Devuelve el valor de 'text' o un string vacío si no existe
+        return opinion.get("text", "")
     elif isinstance(opinion, list) and opinion:
-        return opinion[0] if isinstance(opinion[0], str) else str(opinion[0])  
-    return str(opinion)  # Asegurar que siempre sea string
-
+        return str(opinion[0])
+    return str(opinion)
 
 for opinion in opiniones:
-    opinion = extraer_texto(opinion)  # Convertirlo en string siempre
+    opinion = extraer_texto(opinion)  
 
-    # Obtener sentimiento con pysentimiento
+    # 🔹 Eliminar menciones al negocio
+    opinion = re.sub(nombreNegocio.lower(), "", opinion.lower())  
+
+    # Obtener sentimiento
     resultado = analyzer.predict(opinion)
+    sentimiento = resultado.output  # Usar .output en lugar de .label
 
-    if isinstance(resultado, list) and resultado:  
-        sentimiento = resultado[0].output  # Accede al primer elemento si es lista
-    else:
-        sentimiento = resultado.output  # Si es un solo objeto, accede directamente
-
-    # Limpiar texto y tokenizar
-    opinion = re.sub(r'[^\w\s]', '', opinion.lower())  # Eliminar signos de puntuación
+    # Limpiar texto
+    opinion = re.sub(r'\d+', '', opinion)  # Eliminar números
+    opinion = re.sub(r'[^\w\s]', '', opinion.lower())  
     palabras = word_tokenize(opinion)
-    palabras = [word for word in palabras if word not in stop_words]  # Eliminar stopwords
+    
+    # Eliminar stopwords
+    palabras_filtradas = [word for word in palabras if word not in stop_words]
 
+    # Procesar con Spacy y extraer solo sustantivos
+    doc = nlp(" ".join(palabras_filtradas))
+    palabras_sustantivos = [token.text for token in doc if token.pos_ == "NOUN"]
 
     # Guardar palabras clave según sentimiento
     if sentimiento == "POS":
-        positivas.extend(palabras)
+        positivas.extend(palabras_sustantivos)
     elif sentimiento == "NEG":
-        negativas.extend(palabras)
+        negativas.extend(palabras_sustantivos)
 
 # Contar frecuencia de palabras
 top_positivas = Counter(positivas).most_common(5)
@@ -90,4 +92,3 @@ for palabra, freq in top_positivas:
 print("\n🔻 Características más mencionadas en opiniones **negativas**:")
 for palabra, freq in top_negativas:
     print(f"- {palabra} ({freq} veces)")
-
