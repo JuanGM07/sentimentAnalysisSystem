@@ -3,86 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizar Reseñas</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
-        h2 {
-            margin-top: 50px;
-            color: #333;
-            font-size: 24px;
-        }
-        form {
-            margin: 20px auto;
-            width: 350px;
-            padding: 20px;
-            background: white;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-        input {
-            width: 90%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background: #007BFF;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            transition: background 0.3s ease;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        #progress-container {
-            display: none;
-            margin-top: 20px;
-        }
-        #progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #ddd;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-        #progress-bar div {
-            height: 100%;
-            width: 0%;
-            background: #007BFF;
-            animation: progress-animation 3s ease-in-out forwards;
-        }
-        @keyframes progress-animation {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-    </style>
+    <title>Reviews Analyzer</title>
+    <!-- Vincular el archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://kit.fontawesome.com/YOUR-KIT-ID.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <h2>Ingrese el nombre del negocio</h2>
-    <form id="searchForm" method="post">
-        <input type="text" name="business_name" required placeholder="Ejemplo: Mi bar favorito">
-        <button type="submit">Analizar</button>
-        <div id="progress-container">
-            <p>Procesando análisis...</p>
-            <div id="progress-bar">
-                <div></div>
+    <div class="header">
+        <h1>Reviews Analyzer</h1>
+        <img src="/static/images/cover.png" alt="Reviews Analyzer Image" class="header-image">
+    </div>
+    
+    <div class="container">
+        <h2>Ingrese el nombre del negocio</h2>
+        <form id="searchForm" method="post">
+            <input type="text" name="business_name" required placeholder="Ej: Restaurante Bonilla">
+            <button type="submit">Analizar</button>
+            <div id="progress-container">
+                <p>Procesando análisis...</p>
+                <div id="progress-bar">
+                    <div></div>
+                </div>
+            </div>
+        </form>
+
+        <div class="about-section">
+            <h3>¿Quién Soy?</h3>
+            <p>Hola, soy Juan González y tengo 20 años. Actualmente estudio ingeniería mecánica, pero mi pasión es la programación y la informática.
+                Ahora mismo me centro en crear modelos de aprendizaje automático mediante API o bases de datos gratuitas, 
+                intentando resolver problemas reales. Después los implemento en alguna plataforma en la nube,
+                 o quizás solo como información en alguna plataforma de inteligencia empresarial como Tableau.</p>
+            
+            <!-- 🔹 Redes Sociales -->
+            <div class="social-links">
+                <div class="social-item">
+                    <img src="{{ url_for('static', filename='images/github_logo.png') }}" alt="GitHub" class="social-icon">
+                    <a href="https://github.com/JuanGM07" target="_blank">@JuanGM07</a>
+                </div>
+                <div class="social-item">
+                    <img src="{{ url_for('static', filename='images/linkedin.png') }}" alt="LinkedIn" class="social-icon">
+                    <a href="https://www.linkedin.com/in/jgmdatascience/" target="_blank">@jgmdatascience</a>
+                </div>
+                <div class="social-item">
+                    <img src="{{ url_for('static', filename='images/tiktok_logo.png') }}" alt="TikTok" class="social-icon">
+                    <a href="https://www.tiktok.com/@jgmdev" target="_blank">@JGMDeV</a>
+                </div>
             </div>
         </div>
-    </form>
+        <div class="uso-programa">
+            <h2>¿Cuál es el uso de Reviews Analyzer?</h2>
+            <p>
+                Analyzer Reviews es una herramienta diseñada para dar una vista general sobre las opiniones positivas y negativas de cualquier negocio. 
+                Recopila informacion de Google Places, además de scrapear información de decenas de páginas webs. 
+                Luego realiza un limpiado y posterior análisis de sentimiento clasificando que aspectos son los mas negativos y positivos. 
+                Todo el código está en mi GitHub.
+                Para cualquier problema o propuesta: juanglezm3@gmail.com
+            </p>
+        </div>
+    </div>
 
     <script>
         document.getElementById('searchForm').addEventListener('submit', function() {

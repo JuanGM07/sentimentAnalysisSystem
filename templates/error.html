@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Restringido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        a {
+            text-decoration: none;
+            color: #721c24;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Acceso Restringido</h1>
+        <p>{{ message }}</p>
+        <p>Vuelve a intentarlo mañana o contacta conmigo.</p>
+        <a href="{{ url_for('index') }}">Volver a la página principal</a>
+    </div>
+</body>
+</html>
