@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Opiniones</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .wordcloud {
+            width: 45%;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Análisis de Opiniones para {{ nombreNegocio }}</h1>
+    
+    <div class="container">
+        <div class="wordcloud">
+            <h2 style="color: blue;">Palabras más mencionadas (Positivas)</h2>
+            <img src="data:image/png;base64,{{ img_positivas }}" alt="Nube de palabras positivas">
+        </div>
+        <div class="wordcloud">
+            <h2 style="color: red;">Palabras más mencionadas (Negativas)</h2>
+            <img src="data:image/png;base64,{{ img_negativas }}" alt="Nube de palabras negativas">
+        </div>
+    </div>
+</body>
+</html>
