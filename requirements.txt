@@ -82,11 +82,11 @@ requests==2.32.3
 requests-oauthlib==2.0.0
 rich==13.9.4
 safetensors==0.5.3
+scikit-learn==1.6.1
 scipy==1.15.2
 setuptools==76.0.0
 shellingham==1.5.4
 six==1.17.0
-sklearn==0.0.post12
 smart-open==7.1.0
 soupsieve==2.6
 spacy==3.8.4
