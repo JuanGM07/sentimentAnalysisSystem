@@ -60,3 +60,4 @@ def sentiment_analysis(opiniones, nombreNegocio):
             negativas.extend(palabras_sustantivos)
 
     return positivas, negativas
+
