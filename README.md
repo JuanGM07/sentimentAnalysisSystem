@@ -63,7 +63,7 @@ _Ya tendrias la herramienta corriendo en tu maquina local_
 
 Mira el archivo [LICENSE.md](LICENSE.md) para detalles. Si quieres usar esta herramienta para tu uso personal, agrega un enlace a este repositorio en tu readme por favor. Espero que sea de utilidad.
 
-## Expresiones de Gratitud 🎁
+## Mis redes sociales 🌐
 
 * Comenta a otros sobre este proyecto 📢
 * Mis redes sociales son: 
